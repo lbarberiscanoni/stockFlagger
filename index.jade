@@ -1,0 +1,28 @@
+doctype html
+head
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
+    script(src="//code.jquery.com/jquery-1.11.3.min.js")
+    script(src="//code.jquery.com/jquery-migrate-1.2.1.min.js")
+    script(src="https://cdn.firebase.com/js/client/2.2.9/firebase.js")
+body
+    h1 Hello
+    .container
+        #controls.col-md-6
+            input(type="text", placeholder="insert stock ticker").form-control#stockToAdd
+            button.btn.btn-default#addStock Add Stock
+        .col-md-6
+            h2 Stocks Followed
+            #stocksFollowed
+    script(type="text/javascript").
+        var stocksToFollow = new Firebase()
+        stocksToFollow.on("child_added", function(snapshot) {
+            var stock = snapshot.val();
+            $("#stocksFollowed").empty();
+            $("#stocksFollowed").append("<button class='btn btn-default'>" + stock.name + "</button>");
+        });
+        $("#addStock").click(function() {
+            var stockToAdd = $("#stockToAdd");
+            stocksToFollow.update({
+                "ticker": stockToAdd,
+            });
+        });
