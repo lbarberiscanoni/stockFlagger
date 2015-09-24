@@ -6,21 +6,13 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email import Encoders
-from bottle import *
-from os import environ
-@route("/send")
-def send():
-    return 'e'
-    user = "hllbck7@gmail.com"
-    pwd = "l0ll02012"
-    to = request.query.to
-    subject = request.query.subject
-    text = request.query.text
 
+
+def send(user, pwd, to, subject, text):
     msg = MIMEMultipart()
-    msg['From'] = user
-    msg['To'] = to
-    msg['Subject'] = subject
+    #msg['From'] = user
+    #msg['To'] = to
+    #msg['Subject'] = subject
     msg.attach(MIMEText(text))
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
     mailServer.ehlo()
@@ -29,9 +21,9 @@ def send():
     mailServer.login(user, pwd)
     mailServer.sendmail(user, to, msg.as_string())
     mailServer.close()
-    return "SUCCESS"
 
-if __name__ == "__never_gonna_give_you_up__":
+
+if __name__ == "__main__":
     desc = "To send emails from a gmail account.\n"
     desc += "\n"
     desc += "Example:\n"
@@ -60,6 +52,3 @@ if __name__ == "__never_gonna_give_you_up__":
     
     a = parser.parse_args()
     send(a.user, a.password, a.to, a.subject, a.body)
-
-if __name__ == '__main__':
-    run(server='gunicorn', host='0.0.0.0', port=int(environ.get("PORT", 5000)))

@@ -1,21 +1,17 @@
-from subprocess import *
+import subprocess
 from yahoo_finance import *
 from datetime import *
 
-stocksToFollow = ["goog"]
+stocksToFollow = {"FNMA": 2.31, "FB": 92, "AAPL": 110}
 while True:
-    def timeStamp():
-        today = datetime.today()
-        timeStamp = []
-        for attr in ["hour","minute","second","microsecond"] :
-            timeStamp.append(getattr(today, attr))
-        return timeStamp
-
+    timestamp = str(datetime.today()).split()[1]
+    print timestamp
     for stock in stocksToFollow:
-        priceAtThisMoment = stock.get_historical()
-        print timeStamp()
-        print priceAtThisMoment 
+        priceTarget = stocksToFollow[stock]
+        priceAtThisMoment = Share(stock).get_price()
+        print stock + ": " + priceAtThisMoment 
 
-        if priceAtThisMoment > 100:
-            stockUpdate = "python gmailText.py -u hllbck7@gmail.com -p l0ll02012 -t 8642436724@att.net -s 'stock update' -m '" + stockName + ": " + priceAtThisMoment + "'"
+        if priceAtThisMoment == priceTarget:
+            stockUpdate = "python gmailText.py -u hllbck7 -p l0ll02012 -t 8642436724@text.att.net -b '" + stock + " is at " + priceAtThisMoment + "'"
             subprocess.call(stockUpdate, shell=True)
+    print "-------------------------------"
